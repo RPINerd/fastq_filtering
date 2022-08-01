@@ -7,22 +7,37 @@ import sys
 
 def main(args):
 
+    keep_bool = len(args.keep) > 0
+    drop_bool = len(args.drop) > 0
+    keep_list = args.keep if (keep_bool) else None
+    drop_list = args.drop if (drop_bool) else None
+
     #- Debug
-    logging.debug("Keep: " + args.keep)
-    logging.debug("Drop: " + args.drop)
+    logging.debug("Keep: " + str(keep_list))
+    logging.debug("Drop: " + str(drop_list))
 
     tot_input = 0
     dropped = 0
     pruned = []
     for record in SeqIO.parse(args.fastq, "fastq"):
+        
         tot_input += 1
-        if re.search(args.drop, str(record.seq)):
-            dropped += 1
+
+        if drop_bool:
+            drop_flag = False
+            for reg in drop_list:
+                if re.search(reg, str(record.seq)):
+                    dropped += 1
+                    drop_flag = True
+                    break
+
+        if drop_flag:
             continue
-        elif re.search(args.keep, str(record.seq)):
-            pruned.append(record)
-        else:
-            continue
+        elif keep_bool:
+            for reg in keep_list:
+                if re.search(reg, str(record.seq)):
+                    pruned.append(record)
+                    break
     
     logging.info("Filtering Stats:\n\tTotal Input Records: {tot} \
         \n\tDropped Records: {drp} \
@@ -40,8 +55,8 @@ if __name__ == "__main__":
     # Argument Parsing
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--fastq", help="Input fastq file", required=True)
-    parser.add_argument("-k", "--keep", help="Keep reads matching this regex", required=False)
-    parser.add_argument("-d", "--drop", help="Drop reads matching this regex", required=False)
+    parser.add_argument("-k", "--keep", nargs="*", help="Keep reads matching this regex", required=False)
+    parser.add_argument("-d", "--drop", nargs="*", help="Drop reads matching this regex", required=False)
     parser.add_argument("-s", "--sync", help="Sync the filtered file to its paired read", required=False)
     parser.add_argument("-v", "--verbose", help="Creates logging file with information for debugging", required=False, action='store_true')
     args = parser.parse_args()
