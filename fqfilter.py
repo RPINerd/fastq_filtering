@@ -7,14 +7,14 @@ import sys
 
 def main(args):
 
+    #TODO this is ugly
     keep_bool = len(args.keep) > 0
     drop_bool = len(args.drop) > 0
     keep_list = args.keep if (keep_bool) else None
     drop_list = args.drop if (drop_bool) else None
 
     #- Debug
-    logging.debug("Keep: " + str(keep_list))
-    logging.debug("Drop: " + str(drop_list))
+    logging.debug("Keep: {}\nDrop: {}".format(str(keep_list), str(drop_list)))
 
     tot_input = 0
     dropped = 0
