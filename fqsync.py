@@ -1,5 +1,6 @@
-from Bio import SeqIO
 import sys
+
+from Bio import SeqIO
 
 r1_reads = {}
 for record in SeqIO.parse(sys.argv[1], "fastq"):
@@ -18,4 +19,3 @@ for r2 in r2_reads.keys():
     if r1_reads.get(r2):
         SeqIO.write(r1_reads[r2], r1_sync_file, "fastq")
         SeqIO.write(r2_reads[r2], r2_sync_file, "fastq")
-
