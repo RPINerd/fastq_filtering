@@ -1,4 +1,4 @@
-# fastq_filtering
+# DEPRECATED, merged into biox_macguffins
 
 Provided a single, or list of, regular expressions, filter out all reads from a given fastq file which match said expression(s).
 
@@ -27,5 +27,5 @@ And you can also do both at once!
 
 ## Requirements
 
-Built on Python 3.11, but may be fine back as far as 3.7  
+Built on Python 3.11, but may be fine back as far as 3.7
 Needs the [BioPython](https://biopython.org/) package
